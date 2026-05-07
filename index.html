@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lịch Sử 11 - Pro Study (AI Powered)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #0f172a; /* Slate 900 */
+            --bg-card: #1e293b; /* Slate 800 */
+            --bg-hover: #334155; /* Slate 700 */
+            --text-main: #f8fafc; /* Slate 50 */
+            --text-muted: #94a3b8; /* Slate 400 */
+            --primary: #6366f1; /* Indigo 500 */
+            --primary-hover: #4f46e5; /* Indigo 600 */
+            --success: #10b981; /* Emerald 500 */
+            --success-bg: rgba(16, 185, 129, 0.1);
+            --danger: #ef4444; /* Red 500 */
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            --warning: #f59e0b; /* Amber 500 */
+            --border-color: #334155;
+            --ai-gradient: linear-gradient(135deg, #a855f7, #ec4899, #f43f5e); /* AI Sparkle colors */
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Responsive Container */
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 2vh;
+            position: relative;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        /* ---------------- HOME SCREEN ---------------- */
+        #home-screen { text-align: center; }
+        
+        .logo-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .app-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .settings-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .settings-box label {
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .lesson-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lesson-btn {
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .lesson-btn span.icon { font-size: 20px; }
+
+        .lesson-btn:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .lesson-btn:active { transform: translateY(1px); }
+
+        .lesson-btn.all-btn {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border: none;
+            color: white;
+            justify-content: center;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        .lesson-btn.all-btn:hover {
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        /* ---------------- QUIZ SCREEN ---------------- */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 0;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .stat-q { color: var(--text-main); }
+        .stat-s { color: var(--success); }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background-color: var(--bg-main);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        h2.question {
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            color: var(--text-main);
+        }
+
+        /* Options */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 15px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+            font-weight: 500;
+            line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background-color: var(--bg-hover);
+        }
+
+        .option-btn:disabled { cursor: default; }
+
+        /* States */
+        .option-btn.correct {
+            background-color: var(--success-bg);
+            border-color: var(--success);
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--danger-bg);
+            border-color: var(--danger);
+            color: var(--danger);
+            opacity: 0.8;
+        }
+
+        .option-btn.show-correct {
+            border: 2px dashed var(--success);
+            background-color: var(--success-bg);
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* EXPLANATION BOX & AI */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid var(--primary);
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .explanation-box.show { display: block; }
+        .explanation-box h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .explanation-box p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+        .highlight-text {
+            color: var(--warning);
+            font-weight: 700;
+        }
+
+        .ai-btn {
+            background: var(--ai-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .ai-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .ai-btn:active { transform: translateY(1px); }
+
+        .ai-response {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            display: none;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+        .ai-response.loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ec4899;
+            font-style: italic;
+        }
+        .ai-response.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .ai-response b, .ai-response strong {
+            color: #f472b6;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+            40%, 60% { transform: translate3d(6px, 0, 0); }
+        }
+
+        .next-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            display: none;
+            transition: background 0.2s;
+        }
+        .next-btn:hover { background: var(--primary-hover); }
+        .next-btn:active { transform: scale(0.98); }
+
+        /* ---------------- RESULT SCREEN ---------------- */
+        #result-screen { text-align: center; }
+        .result-icon { font-size: 60px; margin-bottom: 10px; }
+        .result-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+        
+        .score-display {
+            background: var(--bg-main);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .score-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .review-section {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .review-section h3 {
+            font-size: 16px;
+            color: var(--danger);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .review-item {
+            background: var(--bg-main);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--danger);
+        }
+        .q-text { font-weight: 600; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+        .ans-correct { color: var(--success); font-weight: 600; font-size: 13px; margin-top: 6px;}
+
+        /* Responsive Mobile Tweak */
+        @media (max-width: 600px) {
+            .card { padding: 24px 20px; border-radius: 20px; }
+            h2.question { font-size: 17px; }
+            .option-btn { font-size: 14px; padding: 14px 16px; }
+            .app-title { font-size: 24px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- MÀN HÌNH CHỌN BÀI (MENU) -->
+        <div id="home-screen" class="card">
+            <div class="logo-icon">🎓</div>
+            <h1 class="app-title">Lịch Sử 11 Pro</h1>
+            <p class="app-subtitle">Nền tảng ôn tập thông minh với hệ thống giải thích đáp án giúp ghi nhớ sâu.</p>
+            
+            <div class="settings-box">
+                <label>
+                    <input type="checkbox" id="shuffle-toggle" class="custom-checkbox" checked>
+                    🔀 Trộn ngẫu nhiên câu hỏi
+                </label>
+            </div>
+
+            <div class="lesson-grid">
+                <button class="lesson-btn" onclick="startQuiz(11)">
+                    <span class="icon">👑</span> 
+                    <div>Bài 11: Cải cách Minh Mạng</div>
+                </button>
+                <button class="lesson-btn" onclick="startQuiz(12)">
+                    <span class="icon">🌊</span> 
+                    <div>Bài 12: Vị trí Biển Đông</div>
+                </button>
+                <button class="lesson-btn" onclick="startQuiz(13)">
+                    <span class="icon">🇻🇳</span> 
+                    <div>Bài 13: Việt Nam & Biển Đông</div>
+                </button>
+                <button class="lesson-btn all-btn" onclick="startQuiz('all')">
+                    🚀 THI THỬ TOÀN BỘ (91 CÂU)
+                </button>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH LÀM BÀI -->
+        <div id="quiz-screen" class="card" style="display: none;">
+            <div class="quiz-header">
+                <button class="header-btn" onclick="goHome()">❮ Thoát</button>
+                <div class="header-stats">
+                    <span class="stat-s">✓ <span id="live-score">0</span></span>
+                    <span class="stat-q">Câu <span id="current-q">1</span>/<span id="total-q">91</span></span>
+                </div>
+            </div>
+            
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+            
+            <h2 class="question" id="question-text">Đang tải câu hỏi...</h2>
+            
+            <div class="options-list" id="options-container">
+                <!-- Nút đáp án sinh tự động -->
+            </div>
+
+            <!-- Hộp giải thích (Chỉ hiện khi đã chọn) -->
+            <div id="explanation-box" class="explanation-box">
+                <h4>💡 Kiến thức cần nhớ</h4>
+                <p id="explanation-text"></p>
+                
+                <!-- Nút Gọi AI -->
+                <button id="ai-explain-btn" class="ai-btn" onclick="askGeminiAI()">
+                    ✨ Giải thích sâu bằng AI
+                </button>
+                <!-- Vùng chứa câu trả lời của AI -->
+                <div id="ai-response-container" class="ai-response"></div>
+            </div>
+
+            <button id="next-btn" class="next-btn" onclick="nextQuestion()">Tiếp tục ➔</button>
+        </div>
+
+        <!-- MÀN HÌNH KẾT QUẢ -->
+        <div id="result-screen" class="card" style="display: none;">
+            <div class="result-icon">🏆</div>
+            <h2 class="result-title">Hoàn thành bài tập!</h2>
+            <p style="color: var(--text-muted);">Kết quả ôn luyện của bạn</p>
+            
+            <div class="score-display">
+                <div class="score-number" id="score-text">0/0</div>
+                <div style="color: var(--text-muted); font-size: 14px;" id="accuracy-text">Tỉ lệ chính xác: 0%</div>
+            </div>
+            
+            <button class="lesson-btn all-btn" style="width: 100%;" onclick="goHome()">Hoàn tất & Về trang chủ</button>
+
+            <div class="review-section" id="review-section">
+                <h3>📌 Các câu hỏi cần ôn tập lại:</h3>
+                <div id="review-list">
+                    <!-- Danh sách câu sai -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CẤU HÌNH GEMINI API
+        // ==========================================
+        const apiKey = ""; // API Key sẽ được hệ thống tiêm tự động khi chạy
+        const modelEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        // Hàm fetch với Exponential Backoff (Cơ chế thử lại khi lỗi mạng/API)
+        async function fetchWithRetry(url, options, retries = 5) {
+            const delays = [1000, 2000, 4000, 8000, 16000]; // Thời gian chờ (ms)
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (e) {
+                    if (i === retries - 1) throw e;
+                    await new Promise(res => setTimeout(res, delays[i]));
+                }
+            }
+        }
+
+        // Gọi Gemini AI để giải thích câu hỏi
+        async function askGeminiAI() {
+            const aiBtn = document.getElementById('ai-explain-btn');
+            const aiResponseContainer = document.getElementById('ai-response-container');
+            
+            // Lấy thông tin câu hỏi hiện tại
+            const currentQuiz = activeQuizData[currentQuestionIndex];
+            const questionStr = currentQuiz.question;
+            const correctAnsStr = currentQuiz.options[currentQuiz.correctIndex];
+
+            // Cập nhật UI loading
+            aiBtn.style.display = 'none';
+            aiResponseContainer.className = 'ai-response loading';
+            aiResponseContainer.innerHTML = '✨ AI đang suy nghĩ bối cảnh lịch sử...';
+            
+            const prompt = `Bạn là một giáo viên Lịch sử Việt Nam tâm huyết. Hãy giải thích ngắn gọn, sinh động và dễ hiểu cho học sinh lớp 11 về câu hỏi trắc nghiệm sau đây:
+Câu hỏi: "${questionStr}"
+Đáp án đúng là: "${correctAnsStr}"
+Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ một chút bối cảnh lịch sử liên quan (tối đa 3-4 câu). Không lặp lại toàn bộ câu hỏi. Sử dụng định dạng văn bản bình thường, có thể dùng in đậm để nhấn mạnh các từ khóa quan trọng.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: "Trình bày bằng tiếng Việt, giọng điệu truyền cảm hứng, thân thiện với học sinh." }] }
+            };
+
+            try {
+                const result = await fetchWithRetry(modelEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                let text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Xin lỗi, AI không thể phân tích câu này lúc này.";
+                
+                // Format markdown in đậm (**) thành thẻ <b>
+                text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                // Format xuống dòng
+                text = text.replace(/\n/g, '<br>');
+
+                aiResponseContainer.className = 'ai-response show';
+                aiResponseContainer.innerHTML = text;
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                aiResponseContainer.className = 'ai-response show';
+                aiResponseContainer.innerHTML = '⚠️ Đã có lỗi xảy ra khi kết nối với AI. Vui lòng thử lại sau.';
+                aiBtn.style.display = 'flex'; // Cho phép bấm lại nếu lỗi
+            }
+        }
+
+
+        // ==========================================
+        // DỮ LIỆU ĐƯỢC NHÚNG SẴN 100% (91 CÂU)
+        // ==========================================
+        const masterQuizData = [
+            // ================= BÀI 11 =================
+            { lesson: 11, question: "Câu 1. Cuộc cải cách hành chính lớn nhất của vương triều Nguyễn được tiến hành dưới thời vua", options: ["A. Gia Long.", "B. Minh Mạng.", "C. Tự Đức.", "D. Thiệu Trị."], correctIndex: 1 },
+            { lesson: 11, question: "Câu 2: Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) được thực hiện trong bối cảnh lịch sử nào sau đây?", options: ["A. Chế độ quân chủ chuyên chế đang trong thời kì thịnh trị.", "B. Phương thức sản xuất tư bản chủ nghĩa phát triển mạnh", "C. Bộ máy chính quyền nhà nước chưa hoàn thiện, đồng bộ", "D. Đất nước đứng trước nguy cơ xâm lược từ nhà Thanh"], correctIndex: 2 },
+            { lesson: 11, question: "Câu 3: Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) nhằm thực hiện một trong những mục đích nào sau đây?", options: ["A. Tập trung quyền lực vào tay vua", "B. Thúc đẩy kinh tế tư bản chủ nghĩa", "C. Ngăn ngừa nguy cơ giặc ngoại xâm", "D. Khôi phục nền giáo dục Nho học"], correctIndex: 0 },
+            { lesson: 11, question: "Câu 4: Để hoàn thiện bộ máy chính quyền Trung ương, vua Minh Mạng đã cho thành lập một số cơ quan mới có tên là", options: ["A. Lục bộ, Lục khoa, Lục tự", "B. Đô ty, Thừa ty, Hiến ty", "C. Đô sát viện, Cơ mật viện", "D. Thông chính ty, Quốc Tử Giám"], correctIndex: 2 },
+            { lesson: 11, question: "Câu 5: Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) tập trung vào lĩnh vực chủ yếu nào sau đây?", options: ["A. Kinh tế", "B. Văn hóa", "C. Quốc phóng", "D. Hành chính"], correctIndex: 3 },
+            { lesson: 11, question: "Câu 6: Trong cuộc cải cách nửa đầu thế kỉ XIX, vua Minh Mạng đã phân chia bộ máy chính quyền địa phương thành các cấp nào sau đây?", options: ["A. Đạo thừa tuyên, phủ, huyện/châu, xã.", "B. Tỉnh/thành phố, huyện/châu, xã", "C. Lộ, trấn, phủ, huyện/châu, xã", "D. Tỉnh, phủ, huyện/châu, tổng, xã."], correctIndex: 3 },
+            { lesson: 11, question: "Câu 7: Nội dung nào sau đây không phải là hoạt động cải cách của vua Minh Mạng nửa đầu thế kỉ XIX?", options: ["A. Hoàn thiện cơ cấu, chức năng của Lục bộ", "B. Ban hành chính sách hạn điền và hạn nô", "C. Tăng cường giám sát lẫn nhau giữa các cơ quan", "D. Phân chia lại đơn vị hành chính ở cấp địa phương"], correctIndex: 1 },
+            { lesson: 11, question: "Câu 8: Trong công cuộc cải cách của vua Minh Mạng, Nội các được thành lập có vai trò nào sau đây?", options: ["A. Giúp vua khởi thảo các văn bản hành chính", "B. Kiểm tra, giám sát hoạt động của Lục bộ", "C. Phụ trách nhân khẩu, thu thuế trong cả nước", "D. Xướng danh những người đỗ trong kì thi Đình"], correctIndex: 0 },
+            { lesson: 11, question: "Câu 9: Năm 1832, vua Minh Mạng cho thành lập Đô sát viện để thực hiện nhiệm vụ nào sau đây?", options: ["A. Tiếp nhận và xử lý các loại công văn, giấy tờ", "B. Can gián nhà vua và giám sát các cơ quan", "C. Phụ trách nhân khẩu, thu thuế trong cả nước", "D. Phụ trách bang giao, đón tiếp sứ thần nước ngoài"], correctIndex: 1 },
+            { lesson: 11, question: "Câu 10: Trong cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX), đứng đầu tỉnh là", options: ["A. Đô ty, Thừa ty, Hiến ty.", "B. Lục bộ, Lục khoa", "C. Tổng đốc, Tuần phủ .", "D. Lục khoa, Lục tự"], correctIndex: 2 },
+            { lesson: 11, question: "Câu 11. Công cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) đã đem lại một trong những kết quả nào sau đây?", options: ["A. Đưa đất nước phát triển lên chế độ tư bản chủ nghĩa.", "B. Thúc đẩy bộ máy chính quyền các cấp hoạt động hiệu quả.", "C. Góp phần mở cửa và hội nhập nền kinh tế khu vực.", "D. Hoàn thành thống nhất đất nước về mặt lãnh thổ."], correctIndex: 1 },
+            { lesson: 11, question: "Câu 12. Nội dung nào sau đây không phản ánh đúng kết quả cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX)?", options: ["A. Xây dựng được chế độ quân chủ trung ương tập quyền cao độ.", "B. Thống nhất đơn vị hành chính địa phương trong cả nước.", "C. Tổ chức cơ cấu bộ máy nhà nước gọn nhẹ, chặt chẽ.", "D. Xây dựng chế độ quân chủ trung ương phân quyền cao độ."], correctIndex: 3 },
+            { lesson: 11, question: "Câu 13. Trong bộ máy chính quyền trung ương thời Minh Mạng, Cơ mật viện có vai trò tư vấn cho nhà vua về", options: ["A. văn hóa.", "B. quân sự.", "C. giáo dục.", "D. luật pháp."], correctIndex: 1 },
+            { lesson: 11, question: "Câu 14. Ở địa phương, trong công cuộc cải cách hành chính nửa đầu thế kỉ XIX, vua Minh Mạng đã chia cả nước thành", options: ["A. 30 tỉnh và 1 phủ Thừa Thiên.", "B. Bắc Thành, Gia Định thành", "C. 13 đạo thừa tuyên và các phủ", "D. các lộ, trấn, phủ, huyện/châu"], correctIndex: 0 },
+            { lesson: 11, question: "Câu 15. Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) được thực hiện trong bối cảnh", options: ["A. tình hình an ninh – xã hội ở nhiều địa phương bất ổn", "B. bộ máy nhà nước phong kiến cơ bản đã hoàn chỉnh.", "C. tình trạng phân quyền, thiếu thống nhất đã khắc phục.", "D. phương thức sản xuất tư bản chủ nghĩa thâm nhập mạnh"], correctIndex: 0 },
+            { lesson: 11, question: "Câu 16. Cuộc cải cách hành chính của vua Minh Mạng (nửa đầu thế kỉ XIX) không nhằm mục đích nào sau đây?", options: ["A. Khắc phục tình trạng phân quyền, thiếu thống nhất.", "B. Tăng cường tính thống nhất và tiềm lực của đất nước.", "C. Tập trung quyền lực và hoàn thiện bộ máy nhà nước.", "D. Xóa bỏ tình trạng “bế quan tỏa cảng” của đất nước."], correctIndex: 3 },
+            { lesson: 11, question: "Câu 17. Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) có ý nghĩa quan trọng nào sau đây?", options: ["A. xóa bỏ tình trạng “bế quan tỏa cảng” của đất nước.", "B. ngăn chặn mọi nguy cơ xâm lược từ bên ngoài.", "C. đặt cơ sở cho sự phân chia tỉnh, huyện hiện nay.", "D. hoàn thành thống nhất đất nước về mặt lãnh thổ."], correctIndex: 2 },
+            { lesson: 11, question: "Câu 18. Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) và cuộc cải cách của vua Lê Thánh Tông (thế kỉ XV) có điểm giống nhau nào sau đây?", options: ["A. Nâng cao vai trò quản lí của chính quyền ở trung ương.", "B. Khuyến khích, tạo điều kiện cho ngoại thương phát triển.", "C. Ưu tiên cho sự nghiệp thống nhất đất nước về lãnh thổ.", "D. Chú trọng phát triển kinh tế, xã hội theo hướng tư bản."], correctIndex: 0 },
+            { lesson: 11, question: "Câu 19. Một trong những di sản lớn nhất trong cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) còn giá trị đến ngày nay là", options: ["A. cách thức tổ chức bộ máy nhà nước ở trung ương.", "B. cách thức phân chia đơn vị hành chính cấp tỉnh.", "C. tập trung cao độ quyền lực vào trong tay nhà vua.", "D. ưu tiên bổ nhiệm quan lại là người ở địa phương."], correctIndex: 1 },
+            { lesson: 11, question: "Câu 20. Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) và cuộc cải cách của vua Lê Thánh Tông (thế kỉ XV) có điểm khác biệt nào sau đây?", options: ["A. Thành lập lục Bộ để giúp việc cho nhà vua.", "B. Tăng cường quyền lực tuyệt đối của nhà vua.", "C. Thành lập các cơ quan Nội các và Cơ mật viện.", "D. Củng cố chế độ quân chủ chuyên chế tập quyền."], correctIndex: 2 },
+            { lesson: 11, question: "Câu 21: Cuộc cải cách hành chính của vua Minh Mạng được thực hiện trên cơ sở học tập chủ yếu mô hình của vương triều nào sau đây ở Trung Quốc?", options: ["A. Nhà Nguyên", "B. Nhà Thanh", "C. Nhà Tống", "D. Nhà Đường"], correctIndex: 1 },
+            { lesson: 11, question: "Câu 22: Một trong những hạn chế trong cải cách của vua Minh Mạng nửa đầu thế kỉ XIX là", options: ["A. cải cách nặng về củng cố vương triều, ít chú ý đến cải thiện dân sinh", "B. cải cách làm tăng thêm tình trạng cát cứ, phân quyền ở các địa phương", "C. sự giám sát, ràng buộc lẫn nhau giữa các cơ quan, chức quan mờ nhạt", "D. bộ máy nhà nước cồng kềnh, hoạt động kém hiệu quả hơn thời kì trước"], correctIndex: 0 },
+            { lesson: 11, question: "Câu 23: Dưới thời Minh Mạng, triều đình tăng cường quyền kiểm soát đối với vùng dân tộc thiểu số thông qua việc", options: ["A. thiết lập chế độ thổ quan", "B. bãi bỏ quyền thế tập của tù trưởng.", "C. gả công chúa cho các tù trưởng", "D. bỏ lưu quan (quan lại người Kinh)"], correctIndex: 1 },
+            { lesson: 11, question: "Câu 24: Cuộc cải cách của vua Minh Mạng nửa đầu thế kỉ XIX đã đưa đến", options: ["A. sự phát triển thịnh trị đạt đến đỉnh cao", "B. sự xác lập mô hình quản lý độc đáo", "C. sự xác lập của nền quân chủ chuyên chế trung ương tập quyền cao độ mang tính quan liêu.", "D. sự xác lập của nền quân chủ chuyên chế mang tính quý tộc."], correctIndex: 2 },
+            { lesson: 11, question: "Câu 25: Trong cải cách của vua Minh Mạng, cơ quan tư vấn tối cao cho nhà vua về những vấn đề quân sự quan trọng được gọi là", options: ["A. Hàn lâm viện.", "B. Cơ mật viện.", "C. Nội các.", "D. Đô sát viện."], correctIndex: 1 },
+            { lesson: 11, question: "Câu 26: Một trong những tác dụng tích cực của cải cách hành chính thời vua Minh Mạng là góp phần", options: ["A. tạo điều kiện phát triển kinh tế tư bản", "B. hạn chế sự tham nhũng và lộng hành của quan lại.", "C. khích lệ người dân tích cực thi cử và ra làm quan.", "D. phát triển nền văn hóa mang đậm bản sắc dân tộc."], correctIndex: 1 },
+            { lesson: 11, question: "Câu 27: Vua Minh Mạng cải cách hệ thống chính trị - hành chính chặt chẽ không nhằm mục tiêu nào dưới đây?", options: ["A. Nâng cao năng lực hệ thống quan chức ở trung ương.", "B. Thống nhất đất nước, xác lập chủ quyền lãnh thổ.", "C. Thiết lập nên nhà nước quân chủ phong kiến tập quyền.", "D. Hạn chế tối đa quyền tự trị của làng xã, địa phương."], correctIndex: 3 },
+            { lesson: 11, question: "Câu 28. Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) và cuộc cải cách của vua Lê Thánh Tông (thế kỉ XV) có điểm khác biệt nào sau đây?", options: ["A. Thành lập lục Bộ", "B. Tăng cường quyền lực tuyệt đối của vua", "C. Củng cố chế độ quân chủ chuyên chế", "D. Chia cả nước thành 30 tỉnh và phủ Thừa Thiên."], correctIndex: 3 },
+            { lesson: 11, question: "Câu 29: Nội dung nào sau đây phản ánh đúng điểm giống nhau trong cải cách của Hồ Quý Ly và vua Minh Mạng?", options: ["A. Tiến hành khi đất nước khủng hoảng", "B. Cải cách nhằm tăng cường quyền lực của vua và hiệu quả bộ máy", "C. Hướng đến cải thiện dân sinh", "D. Nặng về mô phỏng, dập khuôn"], correctIndex: 1 },
+            { lesson: 11, question: "Câu 30: Một trong những cơ quan chủ chốt của triều đình phong kiến trung ương được thành lập từ thời vua Minh Mạng là", options: ["A. Đô sát viện.", "B. Quốc tử giám.", "C. Hồng lô tự.", "D. Thông chính ty."], correctIndex: 0 },
+            { lesson: 11, question: "Câu 31: Một trong những đặc điểm cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) là", options: ["A. mang tính cưỡng bức", "B. chủ yếu diễn ra trên lĩnh vực chính trị, hành chính", "C. ảnh hưởng trực tiếp đến đại đoàn kết", "D. không tạo điều kiện phát triển kinh tế"], correctIndex: 1 },
+            
+            // ================= BÀI 12 =================
+            { lesson: 12, question: "Câu 1. Biển Đông là vùng biển thuộc", options: ["A. Ấn Độ Dương.", "B. Thái Bình Dương.", "C. Đại Tây Dương.", "D. Địa Trung Hải."], correctIndex: 1 },
+            { lesson: 12, question: "Câu 2. Về vị trí địa lý, biển Đông được coi là cầu nối giữa Thái Bình Dương và", options: ["A. Bắc Băng Dương.", "B. Ấn Độ Dương.", "C. Đại Tây Dương.", "D. Địa Trung Hải."], correctIndex: 1 },
+            { lesson: 12, question: "Câu 3: Biển Đông là vùng biển chung của 9 quốc gia ở châu Á, trong đó có", options: ["A. Trung Quốc", "B. Lào", "C. Ấn Độ", "D. Nhật Bản"], correctIndex: 0 },
+            { lesson: 12, question: "Câu 4: Phía tây nam của biển Đông nối với biển An – đa – man của Ấn Độ Dương thông qua eo biển", options: ["A. La – li – man – tan", "B. Ma – lắc – ca", "C. Lu – dông", "D. Đài Loan"], correctIndex: 1 },
+            { lesson: 12, question: "Câu 5. Tuyến đường vận tải quốc tế qua Biển Đông được coi là nhộn nhịp thứ 2 trên thế giới chỉ sau biển", options: ["A. Địa Trung Hải", "B. Hoa Đông.", "C. Caribê.", "D. Gia - va."], correctIndex: 0 },
+            { lesson: 12, question: "Câu 6. Eo biển Ma-lắc-ca là điểm điều tiết giao thông quan trọng bậc nhất ở châu lục nào sau đây?", options: ["A. Châu Âu.", "B. Châu Mĩ.", "C. Châu Phi.", "D. Châu Á."], correctIndex: 3 },
+            { lesson: 12, question: "Câu 7. Biển Đông là một trong những biển lớn và là đường vận chuyển huyết mạch của khu vực", options: ["A. châu Á - Thái Bình Dương.", "B. Bắc Mĩ và eo biển Đan Mạch.", "C. châu Âu và mũi Hảo Vọng.", "D. châu Phi và châu Nam Cực."], correctIndex: 0 },
+            { lesson: 12, question: "Câu 8. Biển Đông có ảnh hưởng trực tiếp tới cuộc sống của người dân ở một số nước thuộc khu vực nào sau đây?", options: ["A. Châu Phi.", "B. Châu Mĩ.", "C. Châu Âu.", "D. Châu Á"], correctIndex: 3 },
+            { lesson: 12, question: "Câu 9: Biển Đông là vùng biển chung của 9 quốc gia ở châu Á, trong đó có", options: ["A. Ma – lai – xi - a", "B. Mĩ", "C. Liên bang Nga", "D. Mi – an - ma"], correctIndex: 0 },
+            { lesson: 12, question: "Câu 10. Các cảng biển lớn trên Biển Đông có vai trò nào sau đây?", options: ["A. Điểm trung chuyển của tàu thuyền.", "B. Nơi khai thác và chế biến dầu khí.", "C. Điểm tập trung phát triển du lịch.", "D. Nơi giải quyết các vấn đề xã hội."], correctIndex: 0 },
+            { lesson: 12, question: "Câu 11: Eo biển Ma – lắc – ca là điểm điều tiết giao thông đường biển quan trọng, kết nối nhiều nước châu Á, trong đó có 3 nước đông dân của thế giới là In-đô-nê-xi-a, Trung Quốc và", options: ["A. Ai Cập", "B. Liên bang Nga", "C. Ấn Độ", "D. Mông Cổ"], correctIndex: 2 },
+            { lesson: 12, question: "Câu 12: Vùng biển nào sau đây là tuyến đường di chuyển ngắn nhất nối Thái Bình Dương và Ấn Độ Dương?", options: ["A. Biển Địa Trung Hải.", "B. Biển Đông.", "C. Biển Đỏ.", "D. Biển Đen."], correctIndex: 1 },
+            { lesson: 12, question: "Câu 13: Trong lịch sử, Biển Đông được coi là tuyến đường thiết yếu trong giao thông, giao thương, di cư,…giữa", options: ["A. Trung Quốc và Nhật Bản", "B. Trung Quốc và Đông Á", "C. Ấn Độ và Trung Quốc", "D. Nam Á và Tây Á"], correctIndex: 2 },
+            { lesson: 12, question: "Câu 14: Các quốc gia ở khu vực nào sau đây có nền kinh tế gắn trực tiếp với con đường thương mại, hệ thống cảng biển và tài nguyên trên Biển Đông?", options: ["A. Đông Bắc Á và Tây Âu", "B. Đông Bắc Á và Đông Nam Á", "C. Đông Nam Á và Nam Á", "D. Nam Á và Tây Á"], correctIndex: 1 },
+            { lesson: 12, question: "Câu 15. Ở Biển Đông, nguồn tài nguyên thiên nhiên nào sau đây có trữ lượng vào loại lớn nhất thế giới?", options: ["A. Muối biển.", "B. Băng cháy.", "C. Dầu khí.", "D. Quặng sắt."], correctIndex: 2 },
+            { lesson: 12, question: "Câu 16: Nội dung nào sau đây phản ánh đúng sự phong phú về nguồn tài nguyên thiên nhiên của Biển Đông?", options: ["A. Biển Đông là điểm điều tiết giao thông quan trọng", "B. Biển Đông có hàng trăm loài sinh vật động thực vật đa dạng", "C. Biển Đông là địa bàn cạnh tranh ảnh hưởng truyền thống", "D. Biển Đông là nơi tập trung các mô hình chính trị đa dạng"], correctIndex: 1 },
+            { lesson: 12, question: "Câu 17: Nội dung nào sau đây không phản ánh đúng vai trò quan trọng của Biển Đông về mặt kinh tế?", options: ["A. Biển Đông là nơi diễn ra quá trình giao thoa của nhiều nền văn hóa lớn", "B. Biển Đông là tuyến đường vận tải hàng hải nhộn nhịp", "C. Các nước Đông Nam Á hưởng lợi trực tiếp về kinh tế", "D. Các nước ven biển có hoạt động khai thác hải sản và dầu khí sôi động"], correctIndex: 0 },
+            { lesson: 12, question: "Câu 18. Ngành kinh tế nào sau đây của Biển Đông được đẩy mạnh nhờ hệ sinh vật đa dạng và cảnh quan tươi đẹp?", options: ["A. Du lịch biển.", "B. Nuôi trồng thủy, hải sản.", "C. Khai thác khoáng sản.", "D. Đánh bắt cá."], correctIndex: 0 },
+            { lesson: 12, question: "Câu 19. Nội dung nào sau đây thể hiện tầm quan trọng chiến lược của Biển Đông?", options: ["A. Là tuyến hàng hải quốc tế nhộn nhịp nhất", "B. Là tuyến hàng hải nối Thái Bình Dương với Bắc Băng Dương", "C. Có nguồn tài nguyên thiên nhiên biển phong phú.", "D. Là tuyến giao thông hàng hải duy nhất trên biển."], correctIndex: 2 },
+            { lesson: 12, question: "Câu 20. Nguồn tài nguyên khoáng sản đa dạng trên biển Đông là điều kiện thuận lợi để các nước", options: ["A. kiểm soát an ninh giao thông", "B. xây dựng cơ sở phục vụ quân sự.", "C. phát triển hoạt động kinh tế có tầm chiến lược.", "D. xây dựng các trạm dừng chân."], correctIndex: 2 },
+            { lesson: 12, question: "Câu 21. Quần đảo Hoàng Sa và quần đảo Trường Sa thuộc chủ quyền của quốc gia nào sau đây?", options: ["A. Trung Quốc.", "B. Hàn Quốc.", "C. Việt Nam.", "D. Nhật Bản."], correctIndex: 2 },
+            { lesson: 12, question: "Câu 22: Hiện nay, quần đảo Hoàng Sa trực thuộc quyền quản lý hành chính của", options: ["A. thành phố Đà Nẵng.", "B. tỉnh Bà Rịa – Vũng Tàu.", "C. tỉnh Cà Mau.", "D. tỉnh Khánh Hòa"], correctIndex: 0 },
+            { lesson: 12, question: "Câu 23. Hiện nay, quần đảo Trường Sa trực thuộc quyền quản lí hành chính của", options: ["A. thành phố Đà Nẵng.", "B. tỉnh Kiên Giang.", "C. tỉnh Khánh Hòa.", "D. tỉnh Nghệ An."], correctIndex: 2 },
+            { lesson: 12, question: "Câu 24. Nội dung nào sau đây phản ánh đúng tầm quan trọng của Hoàng Sa và Trường Sa đối với Việt Nam về quốc phòng – an ninh?", options: ["A. Xây dựng các trạm dừng chân cho tàu.", "B. Hình thành tuyến phòng thủ nhiều tầng, từ xa đến gần bảo vệ đất liền.", "C. Tạo thế mạnh cho dịch vụ hàng hải", "D. Giúp xây dựng các khu bảo tồn sinh vật biển."], correctIndex: 1 },
+            { lesson: 12, question: "Câu 25: Nội dung nào sau đây không phản ánh đúng tầm quan trọng của Hoàng Sa và Trường Sa đối với Việt Nam về mặt kinh tế?", options: ["A. Tạo thế mạnh về dịch vụ hàng hải", "B. Tạo tuyến phòng thủ nhiều tầng từ xa đến gần để bảo vệ đất liền", "C. Tạo thế mạnh để phát triển kinh tế du lịch biển đảo", "D. Tạo thuận lợi để phát triển ngành thủy sản"], correctIndex: 1 },
+            { lesson: 12, question: "Câu 26: Tầm quan trọng chiến lược của quần đảo Hoàng Sa và Trường Sa được thể hiện ở nội dung nào sau đây?", options: ["A. Đây là hai quần đảo duy nhất thuộc Biển Đông", "B. Đây là hai quần đảo lớn nhất thuộc Biển Đông", "C. Phục vụ tuyến hàng hải huyết mạch trên Biển Đông", "D. Là nơi tiếp nhiên liệu duy nhất"], correctIndex: 2 },
+            { lesson: 12, question: "Câu 27. Đối với Việt Nam, tầm quan trọng chiến lược của quần đảo Trường Sa và Hoàng Sa được thể hiện ở điểm nào sau đây?", options: ["A. Là tuyến đường duy nhất xuất khẩu nông sản.", "B. Đảm bảo an ninh lương thực cho nhân dân.", "C. Có ý nghĩa về chiến lược quốc phòng, an ninh, kinh tế biển.", "D. Là nền tảng duy nhất phát triển công nghiệp nặng."], correctIndex: 2 },
+            { lesson: 12, question: "Câu 28. Nội dung nào sau đây phản ánh đúng về tầm quan trọng chiến lược của Biển Đông đối với sự phát triển kinh tế Việt Nam?", options: ["A. Hệ thống đảo chỉ thuận lợi phát triển du lịch.", "B. Việt Nam được đánh giá là quốc gia có lợi thế và tiềm năng to lớn về tài nguyên biển.", "C. Vùng biển rộng lớn là không gian trọng yếu phát triển văn hóa.", "D. Biển đảo là nguồn cung cấp lương thực chủ yếu cho nhân dân."], correctIndex: 1 },
+            { lesson: 12, question: "Câu 29: Đặc điểm chung về vị trí địa lý của quần đảo Hoàng Sa và Trường Sa là", options: ["A. gần với khu vực đất liền nhất", "B. nằm ở vị trí trung tâm của Biển Đông", "C. đều thuộc khu vực miền Bắc Việt Nam", "D. đều thuộc khu vực miền Nam Việt Nam"], correctIndex: 1 },
+            { lesson: 12, question: "Câu 30: Cả hai quần đảo Hoàng Sa và Trường Sa đều tạo thuận lợi để Việt Nam phát triển ngành kinh tế nào sau đây?", options: ["A. nông nghiệp lúa nước", "B. lâm nghiệp", "C. công nghiệp chế tạo", "D. khai thác hải sản"], correctIndex: 3 },
+            
+            // ================= BÀI 13 =================
+            { lesson: 13, question: "Câu 1. Khu vực nào của Việt Nam không giáp với Biển Đông?", options: ["A. Tây Bắc.", "B. Đông Bắc.", "C. Tây Nam.", "D. Đông Nam."], correctIndex: 0 },
+            { lesson: 13, question: "Câu 2. Bờ biển nước ta dài khoảng 3260 km, kéo dài từ", options: ["A. tỉnh Quảng Ninh đến tỉnh Kiên Giang.", "B. tỉnh Quảng Ninh đến tỉnh An Giang", "C. tỉnh Thái Bình đến tỉnh Cà Mau.", "D. tỉnh Nam định đến tỉnh Bình Thuận."], correctIndex: 0 },
+            { lesson: 13, question: "Câu 3. Nội dung nào sau đây phản ánh đúng tầm quan trọng của Biển Đông về quốc phòng, an ninh đối với Việt Nam?", options: ["A. Tạo điều kiện thuận lợi phát triển kinh tế biển", "B. Là cửa ngõ, tuyến phòng thủ bảo vệ đất liền từ xa.", "C. Là con đường giao thương giữa các vùng", "D. Tạo thuận lợi phát triển thương mại hàng hải"], correctIndex: 1 },
+            { lesson: 13, question: "Câu 4. Biển Đông nước ta góp phần quan trọng vào việc phát triển các ngành kinh tế trọng điểm, ngoại trừ", options: ["A. nông nghiệp trồng lúa nước.", "B. thương mại hàng hải.", "C. nuôi trồng thủy sản.", "D. du lịch - dịch vụ."], correctIndex: 0 },
+            { lesson: 13, question: "Câu 5. Về quốc phòng, an ninh, tầm quan trọng của Biển Đông đối với Việt Nam được thể hiện ở điểm nào sau đây?", options: ["A. Là nơi có trữ lượng dầu khí lớn nhất", "B. Là nơi có nguồn tài nguyên sinh vật đa dạng", "C. Là khu vực tập trung các tuyến đường chiến lược", "D. Là tuyến phòng thủ từ phía đông của đất nước."], correctIndex: 3 },
+            { lesson: 13, question: "Câu 6. Hệ thống các cảng dọc Biển Đông là điều kiện thuận lợi cho Việt Nam phát triển ngành kinh tế chủ yếu nào sau đây?", options: ["A. nông nghiệp lúa nước.", "B. thương mại hàng hải.", "C. nuôi trồng thủy sản.", "D. khai thác tài nguyên biển."], correctIndex: 1 },
+            { lesson: 13, question: "Câu 7: Với vị trí địa lý và tài nguyên của Biển Đông, Việt Nam có thể khai thác phát triển nhiều ngành mũi nhọn, ngoại trừ", options: ["A. giao thông hàng hải", "B. du lịch biển", "C. công nghiệp khai khoáng", "D. chăn nuôi gia cầm"], correctIndex: 3 },
+            { lesson: 13, question: "Câu 8: Nội dung nào sau đây không phản ánh đúng tầm quan trọng của Biển Đông về kinh tế đối với Việt Nam?", options: ["A. Là con đường để Việt Nam giao lưu hội nhập văn hóa", "B. Là cửa ngõ để Việt Nam giao lưu kinh tế với thế giới", "C. Cung cấp tiềm năng bảo tồn đa dạng sinh học", "D. Tạo điều kiện thuận lợi phát triển du lịch biển"], correctIndex: 0 },
+            { lesson: 13, question: "Câu 9: Một trong những bãi biển nổi tiếng của nước ta ở miền Trung, thu hút khách du lịch là", options: ["A. Hạ Long", "B. Đà Nẵng", "C. Phú Quốc", "D. Cát Bà"], correctIndex: 1 },
+            { lesson: 13, question: "Câu 10. Cảnh quan ở Biển Đông đa dạng với nhiều bãi cát, vịnh, hang động, tạo điều kiện phát triển nghành kinh tế mũi nhọn nào?", options: ["A. Khai khoáng.", "B. Du lịch.", "C. Thương mại.", "D. Hàng hải ."], correctIndex: 1 },
+            { lesson: 13, question: "Câu 11. Một trong những nguồn tài nguyên quan trọng nhất ở thềm lục địa Việt Nam ở Biển Đông là", options: ["A. dầu khí.", "B. gỗ lim.", "C. cánh kiến.", "D. đồi mồi."], correctIndex: 0 },
+            { lesson: 13, question: "Câu 12: Nguồn tài nguyên phong phú của Biển Đông đã tạo điều kiện thuận lợi để Việt Nam phát triển ngành", options: ["A. dệt may", "B. khai khoáng", "C. hàng không", "D. da giầy"], correctIndex: 1 },
+            { lesson: 13, question: "Câu 13: Quốc gia đầu tiên khai phá, xác lập chủ quyền và quản lý liên tục đối với quần đảo Trường Sa và Hoàng Sa là", options: ["A. Việt Nam.", "B. Trung Quốc", "C. Thái Lan.", "D. Campuchia."], correctIndex: 0 },
+            { lesson: 13, question: "Câu 14. Một trong những công trình sử học ghi chép về hoạt động thực thi chủ quyền của nhà nước phong kiến VN ở Hoàng Sa, Trường Sa là", options: ["A. Đại Nam thực lục.", "B. Hịch tướng sĩ.", "C. Bình Ngô đại cáo.", "D. Ức Trai thi tập."], correctIndex: 0 },
+            { lesson: 13, question: "Câu 15. Từ thế kỉ XVII đến thế kỉ XIX, tổ chức nào sau đây có nhiệm vụ khai thác sản vật, thực thi chủ quyền tại Hoàng Sa và Trường Sa?", options: ["A. Đội Hoàng Sa, Bắc Hải", "B. Đội Trường Sa, Bắc Hải", "C. Đội Hoàng Sa, Trường Sa.", "D. Đội Nam Hải, Đông Hải"], correctIndex: 0 },
+            { lesson: 13, question: "Câu 16. Dưới thời vua Minh Mạng, hoạt động khẳng định chủ quyền đối với quần đảo Hoàng Sa và Trường Sa được thể hiện qua việc", options: ["A. thành lập các xã đảo, huyện đảo", "B. dựng miếu, trồng cây ở một số đảo", "C. xây dựng các trạm khí tượng lớn", "D. xây dựng các trạm vô tuyến điện"], correctIndex: 1 },
+            { lesson: 13, question: "Câu 17: Dưới thời kì nhà Nguyễn, một trong những biện pháp nhằm xác lập chủ quyền và quản lý đối với hai quần đảo là", options: ["A. xây dựng trạm vô tuyến điện", "B. khảo sát đo vẽ bản đồ", "C. thành lập các huyện đảo", "D. xây dựng ngọn hải đăng"], correctIndex: 1 },
+            { lesson: 13, question: "Câu 18. Nội dung nào sau đây không phản ánh đúng nhiệm vụ của hải đội Hoàng Sa và Bắc Hải dưới triều Nguyễn?", options: ["A. Dựng miếu thờ và trồng cây ở một số đảo", "B. Đo đạc và cắm dấu mốc tại nơi khảo sát.", "C. Ngăn tàu thuyền nước ngoài đến buôn bán", "D. Tiến hành thu gom, khai thác sản vật biển"], correctIndex: 2 },
+            { lesson: 13, question: "Câu 19: Trong những năm 30 của thế kỉ XX, chính quyền Pháp đại diện cho VN đã khẳng định chủ quyền của VN đối với Hoàng Sa và Trường Sa qua việc", options: ["A. thành lập đội Hoàng Sa", "B. thành lập đội Bắc Hải", "C. xây dựng trạm khí tượng", "D. xây dựng sân bay lớn"], correctIndex: 2 },
+            { lesson: 13, question: "Câu 20: Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam đã khẳng định chủ quyền đối với quần đảo Hoàng Sa và Trường Sa thông qua việc", options: ["A. thành lập huyện đảo Hoàng Sa và Trường Sa", "B. thành lập đội Hoàng Sa, Bắc Hải", "C. hoàn thiện Đại Nam nhất thống toàn đồ", "D. cử thủy quân ra tuần tra định kì"], correctIndex: 0 },
+            { lesson: 13, question: "Câu 21: Từ cuối thế kỉ XIX đến năm 1945, quốc gia nào đại diện cho quyền lợi của Việt Nam tiếp tục khẳng định chủ quyền đối với quần đảo?", options: ["A. Trung Quốc", "B. Anh", "C. Mĩ", "D. Pháp"], correctIndex: 3 },
+            { lesson: 13, question: "Câu 22: Sau khi Pháp rút khỏi Việt Nam (1954), lực lượng nào sau đây đã tiếp quản và khẳng định chủ quyền đối với Hoàng Sa và Trường Sa?", options: ["A. Chính quyền Sài Gòn", "B. Chính quyền Bảo Đại", "C. Chính quyền Pháp", "D. Chính phủ Việt Nam dân chủ cộng hòa"], correctIndex: 0 },
+            { lesson: 13, question: "Câu 23. Nhằm bảo vệ chủ quyền, lợi ích hợp pháp của Việt Nam ở Biển Đông, biện pháp nào sau đây không được nhà nước VN áp dụng?", options: ["A. Chủ động tấn công vũ trang.", "B. Tuyên truyền chủ quyền biển, đảo", "C. Đàm phán ngoại giao.", "D. Xây dựng lực lượng quản lý biển"], correctIndex: 0 },
+            { lesson: 13, question: "Câu 24. Nội dung nào sau đây không phải là hoạt động của Việt Nam để bảo vệ chủ quyền biển đảo hiện nay?", options: ["A. Kí kết với các nước láng giềng một số văn kiện", "B. Tham gia Công ước Luật biển năm 1982", "C. Chủ động tấn công ngăn chặn các nước", "D. Thực hiện Tuyên bố về ứng xử của các bên ở Biển Đông"], correctIndex: 2 },
+            { lesson: 13, question: "Câu 25. Chủ trương nhất quán của nước Cộng hòa XHCN Việt Nam trong việc giải quyết các tranh chấp ở Biển Đông hiện nay là", options: ["A. đấu tranh hòa bình.", "B. bạo lực cách mạng.", "C. chiến tranh cách mạng.", "D. bãi công, bãi khóa"], correctIndex: 0 },
+            { lesson: 13, question: "Câu 26: Văn kiện nào sau đây được kí kết giữa các nước ASEAN và Trung Quốc nhằm duy trì hòa bình và ổn định ở Biển Đông?", options: ["A. Luật Biển Việt Nam", "B. Tuyên bố về ứng xử của các bên ở Biển Đông (DOC)", "C. Luật Biên giới quốc gia", "D. Tuyên bố vùng biển Việt Nam"], correctIndex: 1 },
+            { lesson: 13, question: "Câu 27: Văn kiện nào sau đây do Nhà nước Việt Nam ban hành, khẳng định chủ quyền của nước ta đối với quần đảo Hoàng Sa và Trường Sa?", options: ["A. Luật Biển Việt Nam", "B. Tuyên bố về ứng xử các bên", "C. Luật Cảnh sát biển Việt Nam", "D. Hiến chương Liên hợp quốc"], correctIndex: 0 },
+            { lesson: 13, question: "Câu 28. Tại hội nghị Xan Phran-xi-xcô (1951), khi chủ quyền của VN đối với Hoàng Sa và Trường Sa được tuyên bố không bị phản đối. Điều đó cho thấy", options: ["A. tính pháp lý quốc tế và lịch sử về chủ quyền của Việt Nam.", "B. đây là những quần đảo không có giá trị cao về kinh tế.", "C. đây là những quần đảo không có giá trị cao về quốc phòng.", "D. các quốc gia tham dự đều tuyệt đối tôn trọng luật Biển."], correctIndex: 0 },
+            { lesson: 13, question: "Câu 29. Nội dung nào sau đây là một trong những khó khăn của Việt Nam trong việc bảo vệ chủ quyền trên Biển Đông hiện nay?", options: ["A. Sự bất đồng về quan điểm giữa các bên liên quan", "B. Lực lượng quân sự của ta quá yếu", "C. Các Ủy viên thường trực đều ủng hộ Trung Quốc.", "D. Thiếu các bằng chứng pháp lí."], correctIndex: 0 },
+            { lesson: 13, question: "Câu 30: Sự kiện lịch sử nào sau đây liên quan đến những câu thơ 'Hát ru Người yên giấc ngủ ngàn thu... 64 người nhắm mắt'?", options: ["A. Pháp chuyển quyền kiểm soát Hoàng Sa", "B. Cuộc chiến đấu của các chiến sĩ hải quân Việt Nam trên đảo Gạc Ma", "C. Kí kết Tuyên bố về ứng xử DOC", "D. Tiếp quản Trường Sa từ chính quyền Sài Gòn"], correctIndex: 1 }
+        ];
+
+        let activeQuizData = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let wrongAnswers = [];
+
+        const homeScreen = document.getElementById('home-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQLabel = document.getElementById('current-q');
+        const totalQLabel = document.getElementById('total-q');
+        const liveScore = document.getElementById('live-score');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Hàm trộn ngẫu nhiên mảng
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startQuiz(lessonId) {
+            // Lọc dữ liệu theo bài
+            if(lessonId === 'all') {
+                activeQuizData = [...masterQuizData];
+            } else {
+                activeQuizData = masterQuizData.filter(q => q.lesson === lessonId);
+            }
+
+            // Kiểm tra trạng thái trộn đề
+            const isShuffle = document.getElementById('shuffle-toggle').checked;
+            if (isShuffle) {
+                shuffleArray(activeQuizData);
+            }
+
+            homeScreen.style.display = 'none';
+            resultScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+
+            currentQuestionIndex = 0;
+            score = 0;
+            wrongAnswers = [];
+            
+            totalQLabel.innerText = activeQuizData.length;
+            liveScore.innerText = "0";
+            
+            loadQuestion();
+        }
+
+        function goHome() {
+            homeScreen.style.display = 'block';
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'none';
+        }
+
+        function loadQuestion() {
+            const currentQuiz = activeQuizData[currentQuestionIndex];
+            quizScreen.classList.remove('shake');
+            
+            questionText.innerText = currentQuiz.question;
+            currentQLabel.innerText = currentQuestionIndex + 1;
+            
+            const progressPercentage = (currentQuestionIndex / activeQuizData.length) * 100;
+            progressBar.style.width = progressPercentage + '%';
+
+            // Reset trạng thái hiển thị
+            nextBtn.style.display = 'none';
+            explanationBox.classList.remove('show');
+            document.getElementById('ai-explain-btn').style.display = 'flex';
+            document.getElementById('ai-response-container').className = 'ai-response';
+            document.getElementById('ai-response-container').innerHTML = '';
+            optionsContainer.innerHTML = '';
+
+            // Render đáp án
+            currentQuiz.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                button.classList.add('option-btn');
+                button.onclick = () => checkAnswer(index, button);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex, selectedButton) {
+            const currentQuiz = activeQuizData[currentQuestionIndex];
+            const correctIndex = currentQuiz.correctIndex;
+            const allButtons = optionsContainer.querySelectorAll('.option-btn');
+            
+            // Khóa các nút
+            allButtons.forEach(btn => btn.disabled = true);
+
+            // Bóc tách text đáp án đúng (Bỏ chữ cái A. B. C. D.)
+            let correctOptionText = currentQuiz.options[correctIndex].replace(/^[A-D]\.\s*/, '');
+
+            if (selectedIndex === correctIndex) {
+                // Làm đúng
+                selectedButton.classList.add('correct');
+                score++;
+                liveScore.innerText = score;
+                
+                explanationText.innerHTML = `Bạn đã trả lời đúng! Hãy ghi nhớ: <br><span class="highlight-text">${correctOptionText}</span>`;
+            } else {
+                // Làm sai
+                selectedButton.classList.add('wrong');
+                quizScreen.classList.add('shake');
+                allButtons[correctIndex].classList.add('show-correct');
+                
+                wrongAnswers.push({
+                    question: currentQuiz.question,
+                    correctAnswer: currentQuiz.options[correctIndex]
+                });
+
+                explanationText.innerHTML = `Lưu ý, đáp án chính xác phải là: <br><span class="highlight-text">${correctOptionText}</span>`;
+            }
+
+            // Hiển thị khung giải thích & Nút chuyển câu
+            explanationBox.classList.add('show');
+            nextBtn.style.display = 'block';
+            
+            // Cuộn nhẹ xuống dưới để đảm bảo thấy được nút bấm trên điện thoại nhỏ
+            setTimeout(() => {
+                nextBtn.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < activeQuizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function triggerConfetti() {
+            var duration = 3000;
+            var end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        function showResults() {
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+
+            document.getElementById('score-text').innerText = `${score}/${activeQuizData.length}`;
+            
+            const accuracy = Math.round((score / activeQuizData.length) * 100);
+            document.getElementById('accuracy-text').innerText = `Tỉ lệ chính xác: ${accuracy}%`;
+
+            if (accuracy >= 50) triggerConfetti();
+
+            const reviewSection = document.getElementById('review-section');
+            const reviewList = document.getElementById('review-list');
+            
+            if (wrongAnswers.length > 0) {
+                reviewSection.style.display = 'block';
+                reviewList.innerHTML = '';
+                
+                wrongAnswers.forEach(item => {
+                    const div = document.createElement('div');
+                    div.classList.add('review-item');
+                    div.innerHTML = `
+                        <p class="q-text">${item.question}</p>
+                        <p class="ans-correct">✓ ${item.correctAnswer}</p>
+                    `;
+                    reviewList.appendChild(div);
+                });
+            } else {
+                reviewSection.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
