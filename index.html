@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ôn tập Lịch sử lớp 11 - Premium Study</title>
-    <!-- Phông chữ thân thiện, dễ đọc -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         /* =========================================
-           TÙY CHỈNH "BY DUY KHAANH" TẠI ĐÂY
+           TÙY CHỈNH CÁ NHÂN HÓA
            ========================================= */
         :root {
-            --badge-color: #94a3b8; /* Chỉnh màu chữ tại đây (Mã màu HEX hoặc tên tiếng Anh) */
-            --badge-size: 14px;      /* Chỉnh cỡ chữ tại đây */
-            --badge-weight: 700;     /* Độ in đậm (400 là thường, 700 là đậm) */
+            --badge-color: #94a3b8; 
+            --badge-size: 14px;      
+            --badge-weight: 700;     
             
             /* Bảng màu hệ thống */
             --bg-main: #0f172a; 
@@ -39,18 +38,15 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Phông chữ chung cho tiêu đề */
-        h1, h2, h3, h4, .app-title {
+        h1, h2, h3, h4, .app-title, .score-number, .timer-display {
             font-family: 'Nunito', sans-serif;
         }
 
-        /* Phông chữ chung cho văn bản, nút bấm */
         body, p, button, span, div {
             font-family: 'Inter', sans-serif;
         }
 
         body {
-            /* Nền Gradient mượt mà sang trọng */
             background: linear-gradient(135deg, #020617 0%, #1e1b4b 50%, #0f172a 100%);
             background-attachment: fixed;
             color: var(--text-main);
@@ -63,7 +59,6 @@
             position: relative;
         }
 
-        /* Hiệu ứng ánh sáng lơ lửng phía sau */
         body::before, body::after {
             content: '';
             position: absolute;
@@ -74,16 +69,15 @@
         }
         body::before {
             width: 400px; height: 400px;
-            background: rgba(99, 102, 241, 0.3); /* Xanh tím */
+            background: rgba(99, 102, 241, 0.3); 
             top: -100px; left: -100px;
         }
         body::after {
             width: 300px; height: 300px;
-            background: rgba(236, 72, 153, 0.2); /* Hồng phấn */
+            background: rgba(236, 72, 153, 0.2); 
             bottom: -50px; right: -50px;
         }
 
-        /* Chữ by duy khaANH */
         .creator-badge {
             position: absolute;
             top: 20px;
@@ -99,7 +93,6 @@
         }
         .creator-badge:hover { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
-        /* Responsive Container */
         .app-container {
             width: 100%;
             max-width: 650px;
@@ -108,7 +101,6 @@
             z-index: 10;
         }
 
-        /* Giao diện Glassmorphism (Kính mờ) */
         .card {
             background: rgba(30, 41, 59, 0.4);
             backdrop-filter: blur(20px);
@@ -120,7 +112,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* ---------------- HOME SCREEN ---------------- */
+        /* ---------------- MENU ---------------- */
         #home-screen { text-align: center; }
         
         .logo-icon {
@@ -179,11 +171,7 @@
             cursor: pointer;
         }
 
-        .lesson-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .lesson-grid { display: flex; flex-direction: column; gap: 15px; }
 
         .lesson-btn {
             background: rgba(255, 255, 255, 0.03);
@@ -232,9 +220,7 @@
             font-size: 18px;
             font-weight: 800;
         }
-        .lesson-btn.all-btn:hover {
-            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.7);
-        }
+        .lesson-btn.all-btn:hover { box-shadow: 0 12px 30px rgba(99, 102, 241, 0.7); }
 
         /* ---------------- QUIZ SCREEN ---------------- */
         .quiz-header {
@@ -268,10 +254,27 @@
             padding: 8px 16px;
             border-radius: 10px;
             border: 1px solid var(--border-glass);
+            align-items: center;
+        }
+
+        .timer-display {
+            color: var(--warning);
+            font-weight: 800;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            letter-spacing: 1px;
+        }
+        .timer-display.danger { color: var(--danger); animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
         .stat-q { color: var(--text-muted); }
-        .stat-s { color: var(--success); }
 
         .progress-track {
             width: 100%;
@@ -292,21 +295,45 @@
             box-shadow: 0 0 10px var(--primary);
         }
 
+        .question-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
         h2.question {
             font-size: 21px;
             font-weight: 800;
             line-height: 1.6;
-            margin-bottom: 30px;
             color: #ffffff;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            flex: 1;
+        }
+
+        .flag-btn {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            border-radius: 12px;
+            width: 44px; height: 44px;
+            font-size: 20px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .flag-btn:hover { background: rgba(255,255,255,0.1); }
+        .flag-btn.active {
+            background: rgba(250, 204, 21, 0.2);
+            border-color: var(--warning);
+            color: var(--warning);
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
         }
 
         /* Options */
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
+        .options-list { display: flex; flex-direction: column; gap: 14px; }
 
         .option-btn {
             background-color: rgba(255,255,255,0.03);
@@ -332,7 +359,6 @@
 
         .option-btn:disabled { cursor: default; }
 
-        /* States */
         .option-btn.correct {
             background-color: var(--success-bg);
             border-color: var(--success);
@@ -355,7 +381,7 @@
             font-weight: 700;
         }
 
-        /* EXPLANATION BOX & AI */
+        /* EXPLANATION BOX */
         .explanation-box {
             margin-top: 25px;
             padding: 20px;
@@ -372,71 +398,41 @@
             color: var(--primary);
             margin-bottom: 10px;
             font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: flex; align-items: center; gap: 8px;
         }
         .explanation-box p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--text-main);
-            margin-bottom: 15px;
+            font-size: 15px; line-height: 1.6; color: var(--text-main); margin-bottom: 15px;
         }
         .highlight-text {
             color: var(--warning);
             font-weight: 700;
             background: rgba(250, 204, 21, 0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 2px 6px; border-radius: 4px;
         }
 
         .ai-btn {
             background: var(--ai-gradient);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-size: 15px;
-            font-weight: 700;
-            font-family: 'Nunito', sans-serif;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: white; border: none; border-radius: 12px;
+            padding: 12px 20px; font-size: 15px; font-weight: 700;
+            font-family: 'Nunito', sans-serif; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
             transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
         }
         .ai-btn:hover {
-            opacity: 0.95;
-            transform: translateY(-2px);
+            opacity: 0.95; transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
         }
-        .ai-btn:active { transform: translateY(1px); }
 
         .ai-response {
-            margin-top: 15px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            font-size: 15px;
-            line-height: 1.6;
-            color: #f1f5f9;
-            display: none;
-            border: 1px solid rgba(236, 72, 153, 0.3);
+            margin-top: 15px; padding: 20px;
+            background: rgba(0, 0, 0, 0.3); border-radius: 12px;
+            font-size: 15px; line-height: 1.6; color: #f1f5f9;
+            display: none; border: 1px solid rgba(236, 72, 153, 0.3);
             border-left: 4px solid #ec4899;
         }
-        .ai-response.loading {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #f472b6;
-            font-style: italic;
-        }
-        .ai-response.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-        
+        .ai-response.loading { display: flex; align-items: center; gap: 10px; color: #f472b6; font-style: italic; }
+        .ai-response.show { display: block; animation: slideDown 0.3s ease; }
         .ai-response b, .ai-response strong { color: #f472b6; }
 
         @keyframes slideDown {
@@ -453,79 +449,57 @@
         }
 
         .next-btn {
-            background: var(--text-main);
-            color: var(--bg-main);
-            border: none;
-            border-radius: 16px;
-            padding: 18px;
-            font-size: 18px;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 800;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 25px;
-            display: none;
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            background: var(--text-main); color: var(--bg-main);
+            border: none; border-radius: 16px; padding: 18px;
+            font-size: 18px; font-family: 'Nunito', sans-serif; font-weight: 800;
+            cursor: pointer; width: 100%; margin-top: 25px; display: none;
+            transition: all 0.2s; box-shadow: 0 4px 15px rgba(255,255,255,0.2);
         }
         .next-btn:hover { background: #e2e8f0; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,255,255,0.3); }
-        .next-btn:active { transform: scale(0.98); }
 
         /* ---------------- RESULT SCREEN ---------------- */
         #result-screen { text-align: center; }
         .result-icon { font-size: 70px; margin-bottom: 15px; }
-        .result-title {
-            font-size: 28px;
-            font-weight: 900;
-            color: var(--text-main);
-            margin-bottom: 10px;
-        }
+        .result-title { font-size: 28px; font-weight: 900; color: var(--text-main); margin-bottom: 10px; }
         
         .score-display {
-            background: rgba(0,0,0,0.3);
-            border-radius: 20px;
-            padding: 40px;
-            margin: 25px 0;
-            border: 1px solid var(--border-glass);
+            background: rgba(0,0,0,0.3); border-radius: 20px; padding: 40px;
+            margin: 25px 0; border: 1px solid var(--border-glass);
             box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
         .score-number {
-            font-family: 'Nunito', sans-serif;
-            font-size: 56px;
-            font-weight: 900;
+            font-family: 'Nunito', sans-serif; font-size: 56px; font-weight: 900;
             background: linear-gradient(to bottom, #38bdf8, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1;
-            margin-bottom: 15px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            line-height: 1; margin-bottom: 15px;
         }
 
-        .review-section {
-            margin-top: 40px;
-            text-align: left;
+        .action-buttons {
+            display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;
         }
+        .retry-btn {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger);
+            color: var(--danger); padding: 16px; border-radius: 16px;
+            font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .retry-btn:hover { background: var(--danger); color: white; }
+
+        .review-section { margin-top: 40px; text-align: left; }
         .review-section h3 {
-            font-size: 18px;
-            color: var(--danger);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+            font-size: 18px; color: var(--warning); margin-bottom: 20px;
+            padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .review-item {
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--danger);
-            border-right: 1px solid var(--border-glass);
-            border-top: 1px solid var(--border-glass);
-            border-bottom: 1px solid var(--border-glass);
+            background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px; margin-bottom: 15px;
+            border-right: 1px solid var(--border-glass); border-top: 1px solid var(--border-glass); border-bottom: 1px solid var(--border-glass);
         }
+        .review-item.wrong-item { border-left: 4px solid var(--danger); }
+        .review-item.flagged-item { border-left: 4px solid var(--warning); }
         .q-text { font-weight: 600; margin-bottom: 10px; font-size: 15px; line-height: 1.5; color: #f8fafc;}
         .ans-correct { color: var(--success); font-weight: 700; font-size: 14px; margin-top: 8px;}
 
-        /* Responsive Mobile Tweak */
+        /* Mobile Responsive */
         @media (max-width: 600px) {
             body { padding: 10px; }
             .card { padding: 30px 20px; border-radius: 24px; }
@@ -533,18 +507,17 @@
             .option-btn { font-size: 15px; padding: 16px; }
             .app-title { font-size: 26px; }
             .creator-badge { top: 10px; right: 10px; font-size: 12px;}
+            .timer-display { font-size: 14px; }
         }
 
     </style>
 </head>
 <body>
 
-    <!-- Tên tác giả nằm ở góc màn hình -->
-    <div class="creator-badge">by duy khaANH</div>
+    <div class="creator-badge">by Duy Khang</div>
 
     <div class="app-container">
         
-        <!-- MÀN HÌNH CHỌN BÀI (MENU) -->
         <div id="home-screen" class="card">
             <div class="logo-icon">🏛️</div>
             <h1 class="app-title">Ôn tập Lịch sử lớp 11</h1>
@@ -559,16 +532,13 @@
 
             <div class="lesson-grid">
                 <button class="lesson-btn" onclick="startQuiz(11)">
-                    <span class="icon">👑</span> 
-                    <div>Bài 11: Cải cách Minh Mạng</div>
+                    <span class="icon">👑</span> <div>Bài 11: Cải cách Minh Mạng</div>
                 </button>
                 <button class="lesson-btn" onclick="startQuiz(12)">
-                    <span class="icon">🌊</span> 
-                    <div>Bài 12: Vị trí Biển Đông</div>
+                    <span class="icon">🌊</span> <div>Bài 12: Vị trí Biển Đông</div>
                 </button>
                 <button class="lesson-btn" onclick="startQuiz(13)">
-                    <span class="icon">🇻🇳</span> 
-                    <div>Bài 13: Việt Nam & Biển Đông</div>
+                    <span class="icon">🇻🇳</span> <div>Bài 13: Việt Nam & Biển Đông</div>
                 </button>
                 <button class="lesson-btn all-btn" onclick="startQuiz('all')">
                     🚀 THI THỬ TOÀN BỘ (91 CÂU)
@@ -576,12 +546,11 @@
             </div>
         </div>
 
-        <!-- MÀN HÌNH LÀM BÀI -->
         <div id="quiz-screen" class="card" style="display: none;">
             <div class="quiz-header">
                 <button class="header-btn" onclick="goHome()">❮ Thoát</button>
                 <div class="header-stats">
-                    <span class="stat-s">✓ <span id="live-score">0</span></span>
+                    <span class="timer-display" id="timer-display">⏱️ 00:00</span>
                     <span class="stat-q">Câu <span id="current-q">1</span>/<span id="total-q">91</span></span>
                 </div>
             </div>
@@ -590,46 +559,45 @@
                 <div class="progress-fill" id="progress-bar"></div>
             </div>
             
-            <h2 class="question" id="question-text">Đang tải câu hỏi...</h2>
+            <div class="question-container">
+                <h2 class="question" id="question-text">Đang tải câu hỏi...</h2>
+                <button id="flag-btn" class="flag-btn" onclick="toggleFlag()" title="Đánh dấu câu này để xem lại">🚩</button>
+            </div>
             
             <div class="options-list" id="options-container">
-                <!-- Nút đáp án sinh tự động -->
-            </div>
+                </div>
 
-            <!-- Hộp giải thích (Chỉ hiện khi đã chọn) -->
             <div id="explanation-box" class="explanation-box">
                 <h4>💡 Kiến thức cần nhớ</h4>
                 <p id="explanation-text"></p>
-                
-                <!-- Nút Gọi AI -->
                 <button id="ai-explain-btn" class="ai-btn" onclick="askGeminiAI()">
                     ✨ Giải thích sâu bằng AI
                 </button>
-                <!-- Vùng chứa câu trả lời của AI -->
                 <div id="ai-response-container" class="ai-response"></div>
             </div>
 
             <button id="next-btn" class="next-btn" onclick="nextQuestion()">Tiếp tục ➔</button>
         </div>
 
-        <!-- MÀN HÌNH KẾT QUẢ -->
         <div id="result-screen" class="card" style="display: none;">
             <div class="result-icon">🏆</div>
-            <h2 class="result-title">Hoàn thành bài tập!</h2>
-            <p style="color: var(--text-muted);">Kết quả ôn luyện của bạn</p>
+            <h2 class="result-title">Đã nộp bài!</h2>
+            <p style="color: var(--text-muted);">Đã đến lúc nhìn lại kết quả của bạn</p>
             
             <div class="score-display">
                 <div class="score-number" id="score-text">0/0</div>
                 <div style="color: var(--text-muted); font-size: 15px; font-weight: 600;" id="accuracy-text">Tỉ lệ chính xác: 0%</div>
             </div>
             
-            <button class="lesson-btn all-btn" style="width: 100%;" onclick="goHome()">Hoàn tất & Về trang chủ</button>
+            <div class="action-buttons">
+                <button class="lesson-btn all-btn" style="width: 100%; margin-top: 0;" onclick="goHome()">Hoàn tất & Về trang chủ</button>
+                <button class="retry-btn" id="retry-btn" style="display:none;" onclick="startQuiz('retry')">🔄 Chỉ làm lại các câu đã sai</button>
+            </div>
 
             <div class="review-section" id="review-section">
-                <h3>📌 Các câu hỏi cần ôn tập lại:</h3>
+                <h3>📌 Đánh giá chi tiết (Câu sai & Đánh dấu):</h3>
                 <div id="review-list">
-                    <!-- Danh sách câu sai -->
-                </div>
+                    </div>
             </div>
         </div>
     </div>
@@ -638,7 +606,7 @@
         // ==========================================
         // CẤU HÌNH GEMINI API
         // ==========================================
-        const apiKey = ""; // API Key sẽ được hệ thống tiêm tự động khi chạy
+        const apiKey = ""; 
         const modelEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
         async function fetchWithRetry(url, options, retries = 5) {
@@ -685,16 +653,14 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
                 });
                 
                 let text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Xin lỗi, AI không thể phân tích câu này lúc này.";
-                
-                text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                text = text.replace(/\n/g, '<br>');
+                text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
 
                 aiResponseContainer.className = 'ai-response show';
                 aiResponseContainer.innerHTML = text;
             } catch (error) {
                 console.error("Gemini API Error:", error);
                 aiResponseContainer.className = 'ai-response show';
-                aiResponseContainer.innerHTML = '⚠️ Đã có lỗi xảy ra khi kết nối với AI. Vui lòng thử lại sau.';
+                aiResponseContainer.innerHTML = '⚠️ Lỗi kết nối AI. Vui lòng thử lại sau.';
                 aiBtn.style.display = 'flex'; 
             }
         }
@@ -703,7 +669,7 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
         // DỮ LIỆU ĐƯỢC NHÚNG SẴN 100% (91 CÂU)
         // ==========================================
         const masterQuizData = [
-            // ================= BÀI 11 =================
+            // BÀI 11
             { lesson: 11, question: "Câu 1. Cuộc cải cách hành chính lớn nhất của vương triều Nguyễn được tiến hành dưới thời vua", options: ["A. Gia Long.", "B. Minh Mạng.", "C. Tự Đức.", "D. Thiệu Trị."], correctIndex: 1 },
             { lesson: 11, question: "Câu 2: Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) được thực hiện trong bối cảnh lịch sử nào sau đây?", options: ["A. Chế độ quân chủ chuyên chế đang trong thời kì thịnh trị.", "B. Phương thức sản xuất tư bản chủ nghĩa phát triển mạnh", "C. Bộ máy chính quyền nhà nước chưa hoàn thiện, đồng bộ", "D. Đất nước đứng trước nguy cơ xâm lược từ nhà Thanh"], correctIndex: 2 },
             { lesson: 11, question: "Câu 3: Cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) nhằm thực hiện một trong những mục đích nào sau đây?", options: ["A. Tập trung quyền lực vào tay vua", "B. Thúc đẩy kinh tế tư bản chủ nghĩa", "C. Ngăn ngừa nguy cơ giặc ngoại xâm", "D. Khôi phục nền giáo dục Nho học"], correctIndex: 0 },
@@ -736,7 +702,7 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
             { lesson: 11, question: "Câu 30: Một trong những cơ quan chủ chốt của triều đình phong kiến trung ương được thành lập từ thời vua Minh Mạng là", options: ["A. Đô sát viện.", "B. Quốc tử giám.", "C. Hồng lô tự.", "D. Thông chính ty."], correctIndex: 0 },
             { lesson: 11, question: "Câu 31: Một trong những đặc điểm cuộc cải cách của vua Minh Mạng (nửa đầu thế kỉ XIX) là", options: ["A. mang tính cưỡng bức", "B. chủ yếu diễn ra trên lĩnh vực chính trị, hành chính", "C. ảnh hưởng trực tiếp đến đại đoàn kết", "D. không tạo điều kiện phát triển kinh tế"], correctIndex: 1 },
             
-            // ================= BÀI 12 =================
+            // BÀI 12 
             { lesson: 12, question: "Câu 1. Biển Đông là vùng biển thuộc", options: ["A. Ấn Độ Dương.", "B. Thái Bình Dương.", "C. Đại Tây Dương.", "D. Địa Trung Hải."], correctIndex: 1 },
             { lesson: 12, question: "Câu 2. Về vị trí địa lý, biển Đông được coi là cầu nối giữa Thái Bình Dương và", options: ["A. Bắc Băng Dương.", "B. Ấn Độ Dương.", "C. Đại Tây Dương.", "D. Địa Trung Hải."], correctIndex: 1 },
             { lesson: 12, question: "Câu 3: Biển Đông là vùng biển chung của 9 quốc gia ở châu Á, trong đó có", options: ["A. Trung Quốc", "B. Lào", "C. Ấn Độ", "D. Nhật Bản"], correctIndex: 0 },
@@ -768,7 +734,7 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
             { lesson: 12, question: "Câu 29: Đặc điểm chung về vị trí địa lý của quần đảo Hoàng Sa và Trường Sa là", options: ["A. gần với khu vực đất liền nhất", "B. nằm ở vị trí trung tâm của Biển Đông", "C. đều thuộc khu vực miền Bắc Việt Nam", "D. đều thuộc khu vực miền Nam Việt Nam"], correctIndex: 1 },
             { lesson: 12, question: "Câu 30: Cả hai quần đảo Hoàng Sa và Trường Sa đều tạo thuận lợi để Việt Nam phát triển ngành kinh tế nào sau đây?", options: ["A. nông nghiệp lúa nước", "B. lâm nghiệp", "C. công nghiệp chế tạo", "D. khai thác hải sản"], correctIndex: 3 },
             
-            // ================= BÀI 13 =================
+            // BÀI 13 
             { lesson: 13, question: "Câu 1. Khu vực nào của Việt Nam không giáp với Biển Đông?", options: ["A. Tây Bắc.", "B. Đông Bắc.", "C. Tây Nam.", "D. Đông Nam."], correctIndex: 0 },
             { lesson: 13, question: "Câu 2. Bờ biển nước ta dài khoảng 3260 km, kéo dài từ", options: ["A. tỉnh Quảng Ninh đến tỉnh Kiên Giang.", "B. tỉnh Quảng Ninh đến tỉnh An Giang", "C. tỉnh Thái Bình đến tỉnh Cà Mau.", "D. tỉnh Nam định đến tỉnh Bình Thuận."], correctIndex: 0 },
             { lesson: 13, question: "Câu 3. Nội dung nào sau đây phản ánh đúng tầm quan trọng của Biển Đông về quốc phòng, an ninh đối với Việt Nam?", options: ["A. Tạo điều kiện thuận lợi phát triển kinh tế biển", "B. Là cửa ngõ, tuyến phòng thủ bảo vệ đất liền từ xa.", "C. Là con đường giao thương giữa các vùng", "D. Tạo thuận lợi phát triển thương mại hàng hải"], correctIndex: 1 },
@@ -804,7 +770,13 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
         let activeQuizData = [];
         let currentQuestionIndex = 0;
         let score = 0;
-        let wrongAnswers = [];
+        
+        let wrongAnswersData = []; 
+        let flaggedQuestions = new Set();
+        let isFlaggedCurrent = false;
+
+        let timerInterval;
+        let timeRemaining = 0; // Giây
 
         const homeScreen = document.getElementById('home-screen');
         const quizScreen = document.getElementById('quiz-screen');
@@ -817,9 +789,10 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
         const progressBar = document.getElementById('progress-bar');
         const currentQLabel = document.getElementById('current-q');
         const totalQLabel = document.getElementById('total-q');
-        const liveScore = document.getElementById('live-score');
         const nextBtn = document.getElementById('next-btn');
+        const flagBtn = document.getElementById('flag-btn');
 
+        // Hàm xáo trộn mảng
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -827,15 +800,49 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
             }
         }
 
-        function startQuiz(lessonId) {
-            if(lessonId === 'all') {
+        // Khởi động đồng hồ
+        function startTimer(minutes) {
+            clearInterval(timerInterval);
+            timeRemaining = minutes * 60;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("⏳ Hết giờ! Hệ thống sẽ tự động nộp bài.");
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            let s = (timeRemaining % 60).toString().padStart(2, '0');
+            const display = document.getElementById('timer-display');
+            display.innerText = `⏱️ ${m}:${s}`;
+            
+            // Đỏ nhấp nháy nếu còn dưới 1 phút
+            if(timeRemaining <= 60 && timeRemaining > 0) {
+                display.classList.add('danger');
+            } else {
+                display.classList.remove('danger');
+            }
+        }
+
+        function startQuiz(mode) {
+            if (mode === 'retry') {
+                activeQuizData = [...wrongAnswersData];
+            } else if (mode === 'all') {
                 activeQuizData = [...masterQuizData];
             } else {
-                activeQuizData = masterQuizData.filter(q => q.lesson === lessonId);
+                activeQuizData = masterQuizData.filter(q => q.lesson === mode);
             }
 
-            const isShuffle = document.getElementById('shuffle-toggle').checked;
-            if (isShuffle) {
+            const isShuffle = document.getElementById('shuffle-toggle')?.checked;
+            if (isShuffle && mode !== 'retry') {
                 shuffleArray(activeQuizData);
             }
 
@@ -845,18 +852,33 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
 
             currentQuestionIndex = 0;
             score = 0;
-            wrongAnswers = [];
+            wrongAnswersData = [];
+            flaggedQuestions.clear();
             
             totalQLabel.innerText = activeQuizData.length;
-            liveScore.innerText = "0";
+            
+            // 1 phút cho mỗi câu hỏi
+            startTimer(activeQuizData.length);
             
             loadQuestion();
         }
 
         function goHome() {
+            clearInterval(timerInterval);
             homeScreen.style.display = 'block';
             quizScreen.style.display = 'none';
             resultScreen.style.display = 'none';
+        }
+
+        function toggleFlag() {
+            isFlaggedCurrent = !isFlaggedCurrent;
+            if (isFlaggedCurrent) {
+                flagBtn.classList.add('active');
+                flaggedQuestions.add(activeQuizData[currentQuestionIndex]);
+            } else {
+                flagBtn.classList.remove('active');
+                flaggedQuestions.delete(activeQuizData[currentQuestionIndex]);
+            }
         }
 
         function loadQuestion() {
@@ -875,6 +897,11 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
             document.getElementById('ai-response-container').className = 'ai-response';
             document.getElementById('ai-response-container').innerHTML = '';
             optionsContainer.innerHTML = '';
+
+            // Reset nút cờ
+            isFlaggedCurrent = flaggedQuestions.has(currentQuiz);
+            if(isFlaggedCurrent) flagBtn.classList.add('active');
+            else flagBtn.classList.remove('active');
 
             currentQuiz.options.forEach((option, index) => {
                 const button = document.createElement('button');
@@ -897,18 +924,14 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
             if (selectedIndex === correctIndex) {
                 selectedButton.classList.add('correct');
                 score++;
-                liveScore.innerText = score;
-                
                 explanationText.innerHTML = `Lựa chọn cực kỳ chính xác! Hãy ghi nhớ: <br><span class="highlight-text">${correctOptionText}</span>`;
             } else {
                 selectedButton.classList.add('wrong');
                 quizScreen.classList.add('shake');
                 allButtons[correctIndex].classList.add('show-correct');
                 
-                wrongAnswers.push({
-                    question: currentQuiz.question,
-                    correctAnswer: currentQuiz.options[correctIndex]
-                });
+                // Lưu lại object gốc để có thể nạp lại vào mảng thi
+                wrongAnswersData.push(currentQuiz);
 
                 explanationText.innerHTML = `Đừng lo, hãy ghi nhớ đáp án chính xác này nhé: <br><span class="highlight-text">${correctOptionText}</span>`;
             }
@@ -941,6 +964,7 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
         }
 
         function showResults() {
+            clearInterval(timerInterval);
             quizScreen.style.display = 'none';
             resultScreen.style.display = 'block';
 
@@ -951,19 +975,40 @@ Hãy giải thích ngắn gọn tại sao đáp án này đúng và chia sẻ m�
 
             if (accuracy >= 50) triggerConfetti();
 
+            // Hiển thị nút "Làm lại câu sai" nếu có câu sai
+            const retryBtn = document.getElementById('retry-btn');
+            if (wrongAnswersData.length > 0) {
+                retryBtn.style.display = 'block';
+            } else {
+                retryBtn.style.display = 'none';
+            }
+
             const reviewSection = document.getElementById('review-section');
             const reviewList = document.getElementById('review-list');
             
-            if (wrongAnswers.length > 0) {
+            if (wrongAnswersData.length > 0 || flaggedQuestions.size > 0) {
                 reviewSection.style.display = 'block';
                 reviewList.innerHTML = '';
                 
-                wrongAnswers.forEach(item => {
+                // Tạo Set gộp chung các câu cần ôn (Sai + Đánh dấu)
+                let reviewSet = new Set([...wrongAnswersData, ...flaggedQuestions]);
+                
+                reviewSet.forEach(item => {
+                    const isWrong = wrongAnswersData.includes(item);
+                    const isFlagged = flaggedQuestions.has(item);
+                    
                     const div = document.createElement('div');
                     div.classList.add('review-item');
+                    if (isWrong) div.classList.add('wrong-item');
+                    else if (isFlagged) div.classList.add('flagged-item');
+
+                    let tagHtml = '';
+                    if(isFlagged) tagHtml += '🚩 ';
+                    if(isWrong) tagHtml += '❌ ';
+
                     div.innerHTML = `
-                        <p class="q-text">${item.question}</p>
-                        <p class="ans-correct">✓ ${item.correctAnswer}</p>
+                        <p class="q-text">${tagHtml} ${item.question}</p>
+                        <p class="ans-correct">✓ ${item.options[item.correctIndex]}</p>
                     `;
                     reviewList.appendChild(div);
                 });
