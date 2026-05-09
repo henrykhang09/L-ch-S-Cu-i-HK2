@@ -31,13 +31,12 @@
         body {
             background: linear-gradient(135deg, #020617 0%, #1e1b4b 50%, #0f172a 100%);
             color: var(--text-main);
-            height: 100dvh; /* Chiều cao động chuẩn cho mobile */
-            overflow: hidden; /* Cấm cuộn body */
+            height: 100dvh; 
+            overflow: hidden; 
             display: flex;
             justify-content: center;
         }
 
-        /* Vùng chứa ứng dụng dạng cột */
         .app-container {
             width: 100%;
             max-width: 600px;
@@ -48,13 +47,12 @@
             position: relative;
         }
 
-        /* Thẻ chính */
         .card {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
             border-radius: var(--radius);
             border: 1px solid var(--border-glass);
-            flex: 1; /* Chiếm hết chiều cao còn lại */
+            flex: 1; 
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -64,25 +62,104 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* Thanh cuộn tùy chỉnh siêu mỏng */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
         /* ================= HOME SCREEN ================= */
         #home-screen { padding: 30px 20px; overflow-y: auto; }
-        .logo-wrap { text-align: center; margin-bottom: 20px; }
-        .logo-icon { font-size: 50px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; display: inline-block; border: 1px solid var(--border-glass); }
-        .app-title { font-size: 26px; font-weight: 900; color: var(--primary); text-align: center; margin-bottom: 5px; }
-        .app-subtitle { color: var(--text-muted); text-align: center; font-size: 14px; margin-bottom: 25px; }
+        
+        /* Tiêu đề mới */
+        .app-title-wrapper {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding-top: 10px;
+        }
+        .logo-icon { 
+            font-size: 55px; 
+            line-height: 1;
+            filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.6));
+            margin-bottom: 5px;
+        }
+        .app-title { 
+            font-size: 34px; 
+            font-weight: 900; 
+            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            filter: drop-shadow(0px 4px 10px rgba(129, 140, 248, 0.3));
+        }
+        .app-badge {
+            background: linear-gradient(135deg, #ef4444, #f59e0b);
+            color: white;
+            font-size: 13px;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 20px;
+            position: absolute;
+            top: 25px;
+            right: 15%;
+            transform: rotate(15deg);
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.5);
+            border: 2px solid #fff;
+        }
 
         .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--warning); }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 15px; color: var(--text-main); }
         .student-input {
-            width: 100%; padding: 16px; border-radius: 12px; border: 2px solid var(--border-glass);
+            width: 100%; padding: 18px; border-radius: 14px; border: 2px solid var(--border-glass);
             background: rgba(0,0,0,0.3); color: white; font-size: 16px; font-weight: 600; outline: none; transition: 0.3s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
-        .student-input:focus { border-color: var(--primary); background: rgba(0,0,0,0.5); }
+        .student-input:focus { border-color: var(--primary); background: rgba(0,0,0,0.5); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+
+        /* Thanh gạt Toggle Switch mới */
+        .toggle-wrapper {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-glass);
+            padding: 16px 20px;
+            border-radius: 14px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .toggle-wrapper:active { transform: scale(0.98); background: rgba(255,255,255,0.05); }
+        .toggle-label { font-size: 16px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 54px;
+            height: 30px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.1);
+            transition: .4s; border-radius: 34px;
+            border: 1px solid var(--border-glass);
+        }
+        .slider:before {
+            position: absolute; content: "";
+            height: 22px; width: 22px;
+            left: 3px; bottom: 3px;
+            background-color: var(--text-muted);
+            transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); border-color: var(--primary); }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+            background-color: white;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
 
         .lesson-grid { display: flex; flex-direction: column; gap: 12px; }
         .lesson-btn {
@@ -92,7 +169,7 @@
         }
         .lesson-btn:active { transform: scale(0.98); background: rgba(59, 130, 246, 0.2); border-color: var(--primary); }
         .lesson-btn span.icon { font-size: 22px; width: 40px; height: 40px; background: rgba(0,0,0,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        .all-btn { background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: none; justify-content: center; font-size: 16px; color: white; margin-top: 5px; }
+        .all-btn { background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: none; justify-content: center; font-size: 16px; color: white; margin-top: 5px; font-family: 'Nunito', sans-serif; font-weight: 800;}
 
         /* ================= QUIZ SCREEN ================= */
         .quiz-top {
@@ -102,17 +179,11 @@
         .btn-small { background: rgba(255,255,255,0.1); border: none; color: white; font-size: 13px; font-weight: 600; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
         .btn-submit { background: var(--danger); color: white; }
         .timer-display { font-size: 18px; font-weight: 900; color: var(--warning); letter-spacing: 1px; }
-        .timer-display.red { color: var(--danger); animation: pulse 1s infinite; }
-
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         .progress-bar-wrap { height: 4px; background: rgba(0,0,0,0.5); width: 100%; }
         .progress-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.3s; }
 
-        /* VÙNG CUỘN CÂU HỎI VÀ ĐÁP ÁN */
-        .scrollable-content {
-            flex: 1; overflow-y: auto; padding: 20px;
-        }
+        .scrollable-content { flex: 1; overflow-y: auto; padding: 20px; }
 
         .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .q-number { font-size: 14px; font-weight: 700; color: var(--primary); background: rgba(59, 130, 246, 0.15); padding: 4px 10px; border-radius: 6px; }
@@ -141,7 +212,6 @@
         .explanation-box h4 { color: var(--warning); font-size: 14px; margin-bottom: 5px; }
         .explanation-box p { font-size: 14px; line-height: 1.5; color: var(--text-muted); }
 
-        /* THANH ĐIỀU HƯỚNG DƯỚI CÙNG */
         .quiz-bottom {
             padding: 15px 20px; border-top: 1px solid var(--border-glass); background: rgba(0,0,0,0.4);
             display: flex; justify-content: space-between; align-items: center; gap: 10px;
@@ -204,7 +274,7 @@
 
         /* ================= TOAST BỰA ================= */
         .custom-toast {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
             background: #fecdd3; border-left: 5px solid #e11d48; color: #881337;
             padding: 15px 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             font-weight: 700; font-size: 14px; width: 90%; max-width: 400px; z-index: 1000;
@@ -212,30 +282,43 @@
         }
         .custom-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
 
+        /* Cập nhật mobile */
+        @media (max-width: 600px) {
+            .app-title-wrapper { margin-bottom: 20px; }
+            .app-badge { right: 5%; }
+            .toggle-wrapper { padding: 14px 15px; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="funny-toast" class="custom-toast">
-        Khoan, dừng khoảng chừng là 2 giây! 🛑 Chạm tay vào đề thi mà không khai báo danh tính thì AI hệ thống nó "cảm lạnh" đó. Nhập ngay cái tên vô coi! 😤
-    </div>
-
     <div class="app-container">
         
+        <div id="funny-toast" class="custom-toast">
+            🛑 Khoan đã người anh em! Nhập cái tên vô rồi thi gì thi! 😤
+        </div>
+
         <div id="home-screen" class="card">
-            <div class="logo-wrap"><div class="logo-icon">🔥</div></div>
-            <h1 class="app-title">Lịch Sử 11 Pro</h1>
+            <div class="app-title-wrapper">
+                <div class="logo-icon">🔥</div>
+                <h1 class="app-title">Lịch Sử 11</h1>
+                <div class="app-badge">PRO</div>
+            </div>
+            
             <p class="app-subtitle">Hệ thống luyện thi trắc nghiệm siêu tốc</p>
             
             <div class="input-group">
-                <label>👤 Định danh Thí sinh:</label>
-                <input type="text" id="student-name" class="student-input" placeholder="VD: Trần Duy Khang 11A8" value="Trần Duy Khang 11A8">
+                <label>👤 Tên hiển thị trên bảng vàng:</label>
+                <input type="text" id="student-name" class="student-input" placeholder="VD: Trần Duy Khang 11A8">
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                <input type="checkbox" id="shuffle-toggle" class="custom-checkbox" checked>
-                <span style="font-size: 14px; font-weight: 600;">🔀 Trộn ngẫu nhiên câu hỏi</span>
-            </div>
+            <label class="toggle-wrapper" for="shuffle-toggle">
+                <span class="toggle-label">🔀 Trộn ngẫu nhiên câu hỏi</span>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="shuffle-toggle" checked>
+                    <span class="slider"></span>
+                </div>
+            </label>
 
             <div class="lesson-grid">
                 <button class="lesson-btn" onclick="startQuiz(11)"><span class="icon">👑</span> Bài 11: Cải cách Minh Mạng</button>
@@ -290,7 +373,7 @@
         </div>
 
         <div id="result-screen" class="card" style="display: none;">
-            <div class="logo-wrap" style="margin-bottom: 10px;"><div class="logo-icon" style="font-size: 40px; padding: 10px;">🏆</div></div>
+            <div class="logo-icon" style="font-size: 40px; padding: 10px; text-align:center; margin: 0 auto 10px; border:none; box-shadow:none;">🏆</div>
             <h2 style="font-size: 20px; margin-bottom: 5px; color: var(--primary);" id="res-student-name">Tên học sinh</h2>
             <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Thời gian làm bài: <span id="res-time" style="color: white; font-weight: bold;">00:00</span></p>
 
@@ -302,7 +385,7 @@
             <div class="eval-box" id="eval-text">Đang phân tích kết quả...</div>
 
             <div class="action-row">
-                <button class="lesson-btn all-btn" onclick="location.reload()">Làm lại bài thi mới</button>
+                <button class="lesson-btn all-btn" style="margin-top: 0;" onclick="location.reload()">Về trang chủ thi lại</button>
                 <button class="btn-retry-wrong" id="btn-retry-wrong" onclick="startQuiz('retry')">🔥 Phục thù: Chỉ làm lại câu sai</button>
             </div>
 
@@ -419,7 +502,7 @@
         let currentQuestionIndex = 0;
         let studentName = "";
         
-        let answersState = []; // -1 là chưa làm, lưu index đáp án
+        let answersState = []; 
         let flaggedQuestions = new Set();
         
         let timerInterval;
@@ -510,7 +593,7 @@
         function updatePaletteUI() {
             const btns = document.getElementById('palette-grid').children;
             for(let i=0; i<btns.length; i++) {
-                btns[i].className = 'pal-btn'; // reset
+                btns[i].className = 'pal-btn'; 
                 if (i === currentQuestionIndex) btns[i].classList.add('current');
                 
                 let ans = answersState[i];
@@ -530,7 +613,6 @@
             }
 
             if (mode === 'retry') {
-                // Chỉ lấy câu sai
                 let wrongItems = [];
                 answersState.forEach((ans, idx) => {
                     if(ans !== activeQuizData[idx].correctIndex) wrongItems.push(activeQuizData[idx]);
@@ -547,7 +629,7 @@
 
             homeScreen.style.display = 'none';
             resultScreen.style.display = 'none';
-            quizScreen.style.display = 'flex'; // Dùng flex cho layout app
+            quizScreen.style.display = 'flex'; 
             
             currentQuestionIndex = 0;
             answersState = new Array(activeQuizData.length).fill(-1);
@@ -575,7 +657,7 @@
             } else {
                 flaggedQuestions.add(currentQuestionIndex);
             }
-            loadQuestion(); // Reload để update cờ
+            loadQuestion(); 
         }
 
         function changeQuestion(step) {
@@ -588,7 +670,7 @@
 
         function loadQuestion() {
             const qData = activeQuizData[currentQuestionIndex];
-            scrollContent.scrollTop = 0; // Cuộn lên đầu
+            scrollContent.scrollTop = 0; 
             
             document.getElementById('question-text').innerText = qData.question;
             currentQLabel.innerText = currentQuestionIndex + 1;
@@ -596,11 +678,9 @@
             let done = answersState.filter(a => a !== -1).length;
             progressBar.style.width = (done / activeQuizData.length * 100) + '%';
 
-            // Nav buttons
             btnPrev.disabled = currentQuestionIndex === 0;
             btnNext.disabled = currentQuestionIndex === activeQuizData.length - 1;
 
-            // Flag state
             if(flaggedQuestions.has(currentQuestionIndex)) {
                 flagBtn.classList.add('active');
                 flagBtn.innerText = "🚩 Đã đánh dấu";
@@ -643,7 +723,6 @@
         function selectAnswer(idx) {
             answersState[currentQuestionIndex] = idx;
             loadQuestion();
-            // Tự động nhảy câu sau 1.5s nếu muốn (Tạm tắt để user đọc giải thích)
         }
 
         function showResults() {
